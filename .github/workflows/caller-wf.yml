@@ -1,0 +1,42 @@
+name: Generate Terraform Docs
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+
+permissions:
+  contents: write
+  actions: write
+  checks: write
+  repository-projects: write
+  deployments: write
+  id-token: write
+
+jobs:
+  call-workflow-passing-date:
+    uses: Payal412/GitHub-Actions-Terrafrom-ReadmeCreation/.github/workflows/Automate-Readme.yml@main
+
+  terraform:
+    name: Terraform  
+    runs-on: ubuntu-latest    # Run the workflow on an Ubuntu runner
+
+    # Use the bash shell regardless weather the GitHub Actions runner is ubuntu-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3   # Checkout the repository code
+
+        # Install the latest version of Terraform and configure the terraform configuration file with a Terraform local user token.
+      - name: Setup Terraform Docs  
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          cli_config_credentials_token: ${{ secrets.token }}
+
+        #  Initialize a new or existing Terraform working directoty by creating initial files, loading any remote state, downloading modules, etc…
+      - name: Terraform Init
+        run: terraform init
