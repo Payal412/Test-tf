@@ -1,4 +1,4 @@
-name: Generate Terraform Docs
+name: 'Terraform'
 
 on:
   push:
